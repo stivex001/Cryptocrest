@@ -28,11 +28,13 @@ const Verify = (props: Props) => {
 		if (status === "verified") {
 			setShowCongratsUI(true);
 		}
-	}, []);
+		if (status !== "not-verified") {
+			setUploaded(true);
+		}
+	}, [state.verification.status]);
 
 	const onDrop = useCallback(async (acceptedFiles: any) => {
 		setLoading(true);
-		setImageUrl(null);
 
 		const file = acceptedFiles[0];
 		const imgUrl = await upload(file);
@@ -42,7 +44,6 @@ const Verify = (props: Props) => {
 		if (imgUrl) {
 			setDisabled(false);
 			setLoading(false);
-			setUploaded(true);
 		}
 	}, []);
 
@@ -60,6 +61,8 @@ const Verify = (props: Props) => {
 				updateVerification(payload);
 				setVerificationStatus("pending");
 			}
+			setImageUrl(null);
+			setUploaded(true);
 		} catch (error) {
 			console.log(error);
 		}
@@ -89,7 +92,7 @@ const Verify = (props: Props) => {
 					)}
 
 					{verificationStatus === "pending" && (
-						<div className="flex flex-col text-center justify-center items-center text-2xl mt-8 pb-8">
+						<div className="flex min-h-[50vh] flex-col text-center justify-center items-center text-2xl mt-8 pb-8">
 							<div className="text-9xl mb-5 text-primary">
 								<AiOutlineFileSearch />
 							</div>
@@ -132,7 +135,7 @@ const Verify = (props: Props) => {
 					<form onSubmit={handleImageUpload}>
 						<div
 							id="FileUpload"
-							className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-body bg-gray py-4 px-4 dark:bg-primary sm:py-7.5"
+							className="relative mb-5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-body bg-gray py-4 px-4 dark:bg-primary sm:py-7.5"
 							{...getRootProps()}
 						>
 							<input
@@ -153,6 +156,7 @@ const Verify = (props: Props) => {
 									src={imageUrl}
 									height={300}
 									width={300}
+									alt="upload"
 									className="max-w-full mx-auto mb-8 max-h-48 object-cover"
 								/>
 							)}

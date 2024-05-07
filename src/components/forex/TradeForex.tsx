@@ -13,7 +13,7 @@ export const TradeForex = (props: Props) => {
 					<p className="text-lg text-white mb-10">
 						Expecting big news from the White House? Our forex indices are a collection of related,
 						strategically-selected pairs, grouped into a single basket. Trade on our 12 baskets of
-						FX pairs, including the InvestInspire USD Index.
+						FX pairs, including the CryptoCrest USD Index.
 					</p>
 					<div className="">
 						<Button

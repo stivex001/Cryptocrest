@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../lib/firebase";
+import { useUserContext } from "../../context/UserContext";
+import capitalizeFirstLetter from "../../lib/capitalize";
 
 const DropdownAdmin = () => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -10,6 +12,8 @@ const DropdownAdmin = () => {
 
 	const trigger = useRef<any>(null);
 	const dropdown = useRef<any>(null);
+
+	const { state } = useUserContext();
 
 	// close on click outside
 	useEffect(() => {
@@ -47,13 +51,31 @@ const DropdownAdmin = () => {
 				className="flex items-center gap-4"
 				to="#"
 			>
-				<span className="hidden text-right lg:block">
-					<span className="block  font-medium text-black dark:text-white">John Doe</span>
-				</span>
-
-				<span className="relative h-12 w-12 rounded-[100%] bg-boxdark-2 flex items-center justify-center text-2xl ">
-					<FaUser />
-				</span>
+				<div className="hidden text-right lg:block">
+					<span className="block  font-medium mb-1 text-black dark:text-white">
+						{state.firstname} {state.lastname}
+					</span>
+					<span
+						className={`block text-xs  font-medium text-black rounded-md py-1 px-2 text-center ${
+							state.verification.status === "verified"
+								? "text-success bg-success"
+								: "text-white bg-warning"
+						}`}
+					>
+						{state.verification.status[0].toUpperCase() + state.verification.status.slice(1)}
+					</span>
+				</div>
+				<div className="relative w-[50px] h-[50px] bg-boxdark-2 rounded-full overflow-hidden flex items-center justify-center">
+					{state.photoUrl ? (
+						<img
+							src={state.photoUrl}
+							alt="user profie pic"
+							className="rounded-[100%] w-full h-full object-cover"
+						/>
+					) : (
+						<FaUser />
+					)}
+				</div>
 
 				<svg
 					className="hidden fill-current sm:block"

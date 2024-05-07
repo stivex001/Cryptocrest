@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import Modal from "../components/Modals/Modal";
 import { MdCancel } from "react-icons/md";
 import { subscriptions } from "../components/dashboards/data";
+import { SearchBar } from "../components/sharedUi/Searchbar";
+import { Pagination } from "../components/sharedUi/Pagination";
 
 type Props = {};
 
@@ -10,6 +12,34 @@ const AdminSubscription = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [allowEndSubscription, setAllowEndSubscription] = useState(false);
   const [user, setUser] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] = useState(subscriptions);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    const results = subscriptions?.filter(
+      (user) =>
+        user?.userId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.amount?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.status?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUsers(results);
+  }, [searchTerm]);
+
+  const pageSize = 5;
+
+  const startIndex = (currentPage - 1) * pageSize;
+
+  const paginatedUsers = filteredUsers?.slice(
+    startIndex,
+    startIndex + pageSize
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   let subscriptionCount = 0;
 
@@ -72,41 +102,50 @@ const AdminSubscription = (props: Props) => {
         </div>
       </Modal>
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-        <h2 className="font-bold text-xl mb-5">ALL SUBSCRIPTIONS</h2>
-        <div className="max-w-full overflow-x-auto">
+        <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+          ALL SUBSCRIPTIONS
+        </h2>
+        <SearchBar
+          classname="mb-5"
+          onSearch={setSearchTerm}
+          searchTerm={searchTerm}
+        />
+        <div className="max-w-full overflow-x-auto no-scrollbar">
           <table className="w-full table-auto">
             <thead>
-              <tr className="bg-primary text-left dark:bg-meta-4">
-                <th className="min-w-[50px] py-4 px-4 font-medium text-white dark:text-white">
+              <tr className="text-left border-2">
+                <th className="min-w-[50px] py-4 px-4 font-medium text-black dark:text-black">
                   S/N
                 </th>
-                <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                   Fullname
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                   Plan
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                   Amount Invested
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                   Duration
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                   Date
                 </th>
-                <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                   Action
                 </th>
               </tr>
             </thead>
 
             <tbody>
-              {subscriptions.length &&
-                subscriptions.map((subscription: any, key: number) => (
+              {subscriptions?.length &&
+                paginatedUsers?.map((subscription: any, key: number) => (
                   <tr key={key}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="text-black  dark:text-white">{key + 1}</h5>
+                      <h5 className="text-black  dark:text-white">
+                        {subscription?.userId}
+                      </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <h5 className="font-medium text-black dark:text-white">
@@ -139,7 +178,7 @@ const AdminSubscription = (props: Props) => {
                         onClick={() =>
                           handleClickEndSubscription(subscription.userId)
                         }
-                        className="w-[170px] rounded-md  bg-danger text-white py-2 px-3 flex items-center justify-center  gap-x-2"
+                        className="w-[170px] rounded-md  bg-danger text-white py-2 px-3 flex items-center justify-center  gap-x-2 whitespace-nowrap"
                       >
                         <MdCancel />
                         End Subscription
@@ -155,6 +194,11 @@ const AdminSubscription = (props: Props) => {
             </div>
           )}
         </div>
+        <Pagination
+          totalPages={Math.ceil(filteredUsers?.length / pageSize)}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </AdminLayout>
   );

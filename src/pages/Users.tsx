@@ -1,11 +1,12 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import UploadButton2 from "../components/sharedUi/UploadButton2";
 import { MdDeleteForever } from "react-icons/md";
 import Modal from "../components/Modals/Modal";
 import { usersInfo } from "../components/dashboards/data";
-
-
+import { SearchBar } from "../components/sharedUi/Searchbar";
+import { User } from "../types/types";
+import { Pagination } from "../components/sharedUi/Pagination";
 
 type Props = {};
 
@@ -19,8 +20,31 @@ const Users = (props: Props) => {
 
   const [allowDeleteUser, setAllowDeleteUser] = useState(false);
   const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(usersInfo);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  
+  useEffect(() => {
+    const results = usersInfo?.filter(
+      (user) =>
+        user?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.firstname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.mobile?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUsers(results);
+  }, [searchTerm]);
+
+  const pageSize = 5;
+
+  const startIndex = (currentPage - 1) * pageSize;
+
+  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + pageSize);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleBillUser = (user: any) => {
     setShowModal(true);
@@ -35,31 +59,6 @@ const Users = (props: Props) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading((prevLoading) => ({ ...prevLoading, [currentUserId]: true }));
-    // setTimeout(() => {
-    //   try {
-    //     updateUserData(currentUserId, userInput);
-    //   } catch (error) {
-    //     console.log(error);
-    //   } finally {
-    //     setLoading((prevLoading) => ({
-    //       ...prevLoading,
-    //       [currentUserId]: false,
-    //     }));
-    //     toast.success("Status was updated Successfully", {
-    //       duration: 6000,
-    //       position: "top-center",
-    //       style: {
-    //         padding: "16px",
-    //         fontWeight: "bold",
-    //         minWidth: "300px",
-    //       },
-    //       iconTheme: {
-    //         primary: "#10B981",
-    //         secondary: "#FFFF",
-    //       },
-    //     });
-    //   }
-    // }, 1000);
 
     closeModal();
   };
@@ -175,54 +174,62 @@ const Users = (props: Props) => {
       </Modal>
       {usersInfo?.length > 0 && (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <h2 className="font-bold text-xl mb-5">ALL USERS</h2>
-          <div className="max-w-full overflow-x-auto">
+          <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+            ALL USERS
+          </h2>
+          <SearchBar
+            classname="mb-5"
+            onSearch={setSearchTerm}
+            searchTerm={searchTerm}
+          />
+
+          <div className="max-w-full overflow-x-auto no-scrollbar">
             <table className="w-full table-auto">
               <thead>
-                <tr className="bg-primary text-left text-white">
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <tr className=" text-left border-2 ">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     S/N
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-bold text-black dark:text-black">
                     Fullname
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     Username
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     Email
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-bold text-black dark:text-black">
                     Phone
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     Password
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     Country
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-bold text-black dark:text-black">
                     Gender
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-bold text-black dark:text-black">
                     Status
                   </th>
-                  <th className="min-w-[200px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[200px] py-4 px-4 font-bold text-black dark:text-black">
                     Joining Date
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 text-center font-medium text-white dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 text-center font-bold text-black dark:text-black">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {usersInfo?.map((userItem: any, key: number) => (
+                {paginatedUsers?.map((userItem: any, key: number) => (
                   <tr key={key}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="text-black  dark:text-white">{key + 1}</h5>
+                      <h5 className="text-black  dark:text-white">{userItem?.userId}</h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="font-medium text-black dark:text-white">
+                      <h5 className="font-medium text-black dark:text-white whitespace-nowrap">
                         {userItem?.firstname} {userItem?.lastname}
                       </h5>
                     </td>
@@ -294,6 +301,11 @@ const Users = (props: Props) => {
               </tbody>
             </table>
           </div>
+          <Pagination
+            totalPages={Math.ceil(filteredUsers?.length / pageSize)}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </AdminLayout>

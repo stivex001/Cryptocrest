@@ -12,7 +12,7 @@ export default function Features() {
 					<div className="w-full">
 						<div className=" mb-16">
 							<h2 className="text-3xl lg:text-4xl font-bold mb-3">Start Investing Today</h2>
-							<p className="text-xl">InvestInspire has a variety of features that set us apart</p>
+							<p className="text-xl">CryptoCrest has a variety of features that set us apart</p>
 						</div>
 						<div className="md:grid md:grid-cols-2">
 							<FeatureCard

@@ -6,6 +6,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Loader from "./components/ui/Loader";
+import Settings from "./pages/Settings";
+import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -156,8 +158,8 @@ const router = createBrowserRouter([
 				element: <AdminSubscription />,
 			},
 			{
-				path: "admin/verification",
-				element: <AdminVerifications />,
+				path: "admin/trades",
+				element: <AdminTradingSession />,
 			},
 			{
 				path: "user/dashboard",
@@ -184,6 +186,10 @@ const router = createBrowserRouter([
 				element: <Verify />,
 			},
 			{
+				path: "user/settings",
+				element: <Settings />,
+			},
+			{
 				path: "user/buy-bitcoin",
 				element: <BuyBitcoin />,
 			},
@@ -199,6 +205,7 @@ function App() {
 	return (
 		<Suspense fallback={<Loader />}>
 			<UserProvider>
+				<Toaster position="top-right" reverseOrder={false} />
 				<RouterProvider router={router} />
 			</UserProvider>
 		</Suspense>

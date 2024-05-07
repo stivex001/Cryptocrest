@@ -23,7 +23,8 @@ module.exports = {
       },
       backgroundImage: {
         // gradient: "linear-gradient(to bottom,var(--white),var(--primary-50))",
-        authImg: "url('/src/images/authImg.jpg')",
+        authImg: "url('/src/images/authImage.jpg')",
+        aboutImg: "url('/src/images/modern.jpg')",
       },
       colors: {
         gray1: "#f7f6fe",

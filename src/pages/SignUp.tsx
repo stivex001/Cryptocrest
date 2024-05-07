@@ -2,12 +2,17 @@ import { Link } from "react-router-dom";
 import logo from "../images/LOGO-DARK.svg";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import axios from "axios";
-import signUpImg from "../images/authImg.jpg";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+	GoogleAuthProvider,
+	createUserWithEmailAndPassword,
+	getAuth,
+	signInWithPopup,
+} from "firebase/auth";
 import { auth, db } from "../lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Country {
 	name: string;
@@ -35,8 +40,6 @@ export default function SignUp() {
 
 	const navigate = useNavigate();
 
-	// const { signUp } = useAuthContext();
-
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 		const { name, value } = e.target;
 		setFormData((prevData) => ({
@@ -45,9 +48,82 @@ export default function SignUp() {
 		}));
 	};
 
+	const handleGoogleSignUp = async () => {
+		const auths = getAuth();
+		const provider = new GoogleAuthProvider();
+		try {
+			const result = await toast.promise(signInWithPopup(auths, provider), {
+				loading: "Hold on, we're setting up your account",
+				success: "Sign Up Successful",
+				error: "Error Occurred, Try Again",
+			});
+
+			const { user } = result;
+
+			localStorage.setItem("token", user.refreshToken);
+
+			// Check if the user already exists in Firestore
+			const userDoc = await getDoc(doc(db, "users", user.uid));
+			if (!userDoc.exists()) {
+				if (user.displayName) {
+					const [firstname, lastname] = user.displayName?.split(" ");
+
+					localStorage.setItem("token", user.refreshToken);
+					// User doesn't exist, save user data to Firestore
+					await setDoc(doc(db, "users", user.uid), {
+						email: user.email,
+						firstname: firstname[0].toUpperCase() + firstname[1].slice(1),
+						lastname: lastname[0].toUpperCase() + lastname.slice(1),
+						uid: user.uid,
+						photoUrl: user.photoURL,
+						mobile: user.phoneNumber,
+						username: "",
+						country: "",
+						password: "",
+						gender: "",
+						// 	// Other user data you may want to save
+					});
+
+					await setDoc(doc(db, "deposits", user.uid), {
+						deposits: [],
+					});
+
+					await setDoc(doc(db, "withdrawals", user.uid), {
+						withdrawals: [],
+					});
+
+					await setDoc(doc(db, "subscriptions", user.uid), {
+						subscriptions: [],
+					});
+
+					await setDoc(doc(db, "verifications", user.uid), {
+						verification: {
+							document: null,
+							status: "not-verified",
+						},
+					});
+
+					await setDoc(doc(db, "accounts", user.uid), {
+						account: { balance: 0, profit: 0, bonus: 0 },
+					});
+
+					await setDoc(doc(db, "trades", user.uid), {
+						trades: [],
+					});
+
+					navigate("/user/dashboard");
+				}
+			}
+
+			// User exists or has been saved, proceed with your logic
+			console.log("User signed in:", user);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const handleSubmitSignUp = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(formData);
 
 		if (formData.password !== formData.confirmPassword) {
 			setError("Password Mismatch: Password and Confirm Password not the same");
@@ -56,51 +132,60 @@ export default function SignUp() {
 		}
 
 		try {
-			const res = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+			const res = await toast.promise(
+				createUserWithEmailAndPassword(auth, formData.email, formData.password),
+				{
+					loading: "Hold on, we're setting up your account",
+					success: "Sign Up Successful",
+					error: "Error Occurred, Try Again",
+				}
+			);
 
-			localStorage.setItem("token", res.user.refreshToken);
+			if (res.user) {
+				localStorage.setItem("token", res.user.refreshToken);
 
-			await setDoc(doc(db, "users", res.user.uid), {
-				uid: res.user.uid,
-				username: formData.username,
-				email: formData.email,
-				firstname: formData.firstname,
-				lastname: formData.lastname,
-				mobile: formData.mobile,
-				country: formData.country,
-				password: formData.password,
-				gender: formData.gender,
-			});
+				await setDoc(doc(db, "users", res.user.uid), {
+					uid: res.user.uid,
+					username: formData.username,
+					email: formData.email,
+					firstname: formData.firstname,
+					lastname: formData.lastname,
+					mobile: formData.mobile,
+					country: formData.country,
+					password: formData.password,
+					gender: formData.gender,
+					photoUrl: res.user.photoURL,
+				});
 
-			await setDoc(doc(db, "deposits", res.user.uid), {
-				deposits: [],
-			});
+				await setDoc(doc(db, "deposits", res.user.uid), {
+					deposits: [],
+				});
 
-			await setDoc(doc(db, "withdrawals", res.user.uid), {
-				withdrawals: [],
-			});
+				await setDoc(doc(db, "withdrawals", res.user.uid), {
+					withdrawals: [],
+				});
 
-			await setDoc(doc(db, "subscriptions", res.user.uid), {
-				subscriptions: [],
-			});
+				await setDoc(doc(db, "subscriptions", res.user.uid), {
+					subscriptions: [],
+				});
 
-			await setDoc(doc(db, "verifications", res.user.uid), {
-				verification: {
-					document: null,
-					status: "not-verified",
-				},
+				await setDoc(doc(db, "verifications", res.user.uid), {
+					verification: {
+						document: null,
+						status: "not-verified",
+					},
+				});
 
-			});
+				await setDoc(doc(db, "accounts", res.user.uid), {
+					account: { balance: 0, profit: 0, bonus: 0 },
+				});
 
-			await setDoc(doc(db, "accounts", res.user.uid), {
-				account: { balance: 0, profit: 0, bonus: 0 },
-			});
+				await setDoc(doc(db, "trades", res.user.uid), {
+					trades: [],
+				});
 
-			await setDoc(doc(db, "trades", res.user.uid), {
-				trades: [],
-			});
-
-			navigate("/user/dashboard");
+				navigate("/user/dashboard");
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -122,11 +207,11 @@ export default function SignUp() {
 	}, []);
 
 	return (
-		<section className="grid grid-cols-2">
-			<div className="w-[85%] min-h-screen bg-authImg bg-cover"></div>
-			<div className="w-[85%] my-10">
+		<section className="px-6 xl:px-0 xl:grid xl:grid-cols-2">
+			<div className="hidden xl:block xl:w-[85%] min-h-screen bg-authImg bg-center bg-cover"></div>
+			<div className="xl:w-[75%] my-10">
 				<Link to="/" className="flex justify-center items-center mb-16 cursor-pointer">
-					<img src={logo} alt="" className="w-[40%]" />
+					<img src={logo} alt="" className="w-[50%]" />
 				</Link>
 				<form onSubmit={handleSubmitSignUp}>
 					<div className="mb-4 xl:flex gap-x-3">
@@ -289,7 +374,10 @@ export default function SignUp() {
 						</button>
 					</div>
 
-					<button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50">
+					<button
+						onClick={handleGoogleSignUp}
+						className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50"
+					>
 						<span>
 							<svg
 								width="20"

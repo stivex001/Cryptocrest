@@ -20,7 +20,7 @@ export default function Steps() {
           title="Step1: Create Account"
           url="/signup"
           btnText="Sign Up"
-          description="Simply create your InvestInspire account with one click and claim exclusive welcome rewards worth up to USDT $1000!"
+          description="Simply create your CryptoCrest account with one click and claim exclusive welcome rewards worth up to USDT $1000!"
         />
         <StepsCard
           img={depositImg}

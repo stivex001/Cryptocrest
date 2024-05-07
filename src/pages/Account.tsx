@@ -1,14 +1,16 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import Modal from "../components/Modals/Modal";
 import { usersInfo } from "../components/dashboards/data";
 import UploadButton3 from "../components/sharedUi/UploadButton3";
+import { SearchBar } from "../components/sharedUi/Searchbar";
+import { Pagination } from "../components/sharedUi/Pagination";
+import { User } from "../types/types";
 
 type Props = {};
 
 const Account = (props: Props) => {
-
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [accountInput, setAccountInput] = useState({
     balance: "",
     profit: "",
@@ -18,9 +20,34 @@ const Account = (props: Props) => {
   const [loading, setLoading] = useState<{ [currentUserId: string]: boolean }>(
     {}
   );
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(usersInfo);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  useEffect(() => {
+    const results = usersInfo?.filter(
+      (user) =>
+        user?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.firstname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.mobile?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUsers(results);
+  }, [searchTerm]);
+
+  const pageSize = 5;
+
+  const startIndex = (currentPage - 1) * pageSize;
+
+  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + pageSize);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleInputChange = (
@@ -34,17 +61,6 @@ const Account = (props: Props) => {
     e.preventDefault();
 
     setLoading((prevLoading) => ({ ...prevLoading, [userId]: true }));
-
-    // setTimeout(() => {
-    //   try {
-    //     updateBalance(userId, accountInput);
-    //   } catch (error) {
-    //     console.log(error);
-    //   } finally {
-    //     setLoading((prevLoading) => ({ ...prevLoading, [userId]: false }));
-        
-    //   }
-    // }, 1000);
 
     closeModal();
   };
@@ -120,14 +136,14 @@ const Account = (props: Props) => {
           </div>
           <div className="flex gap-x-4 mt-8">
             <button
-              className="bg-meta-3 flex justify-center items-center text-white rounded-md font-medium px-8 py-2"
+              className="bg-meta-3 flex justify-center items-center text-black rounded-md font-medium px-8 py-2"
               type="submit"
             >
               Update
             </button>
             <button
               onClick={closeModal}
-              className="bg-danger flex justify-center items-center text-white rounded-md font-medium px-8 py-2"
+              className="bg-danger flex justify-center items-center text-black rounded-md font-medium px-8 py-2"
             >
               Close
             </button>
@@ -136,55 +152,62 @@ const Account = (props: Props) => {
       </Modal>
       {usersInfo?.length > 0 && (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <h2 className="font-bold text-xl mb-5">ALL USERS ACCOUNT BALANCE</h2>
-          <div className="max-w-full overflow-x-auto">
+          <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+            ALL USERS BALANCE
+          </h2>
+          <SearchBar
+            classname="mb-5"
+            onSearch={setSearchTerm}
+            searchTerm={searchTerm}
+          />
+          <div className="max-w-full overflow-x-auto no-scrollbar">
             <table className="w-full table-auto">
               <thead>
-                <tr className="bg-primary text-left dark:bg-meta-4">
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <tr className="text-left border-2">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     S/N
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                     Fullname
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Balance
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Profit
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Bonus
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {usersInfo?.map((userItem: any, key: number) => (
+                {paginatedUsers?.map((userItem: any, key: number) => (
                   <tr key={key}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="text-black  dark:text-white">{key + 1}</h5>
+                      <h5 className="text-black  dark:text-black">{userItem?.userId}</h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="font-medium text-black dark:text-white">
+                      <h5 className="font-medium text-black dark:text-black">
                         {userItem?.firstname} {userItem?.lastname}
                       </h5>
                     </td>
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                      <p className="text-black dark:text-black">
                         ${userItem?.totalBalance}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                      <p className="text-black dark:text-black">
                         ${userItem.totalProfit}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                      <p className="text-black dark:text-black">
                         ${userItem.totalBonus}
                       </p>
                     </td>
@@ -205,6 +228,11 @@ const Account = (props: Props) => {
               </tbody>
             </table>
           </div>
+          <Pagination
+            totalPages={Math.ceil(filteredUsers?.length / pageSize)}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </AdminLayout>

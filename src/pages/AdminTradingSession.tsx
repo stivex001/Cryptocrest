@@ -1,8 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import Modal from "../components/Modals/Modal";
 import { history, usersInfo } from "../components/dashboards/data";
 import UploadButton from "../components/sharedUi/UploadButton";
+import { SearchBar } from "../components/sharedUi/Searchbar";
+import { Pagination } from "../components/sharedUi/Pagination";
 
 type Props = {};
 
@@ -32,6 +34,35 @@ const AdminTradingSession = (props: Props) => {
     profit: "",
     status: "",
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] =
+    useState<UserTradeHistoriesProps[]>(history);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    const results = history?.filter(
+      (user: any) =>
+        user?.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.amount?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.status?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user?.userId?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUsers(results);
+  }, [searchTerm]);
+
+  const pageSize = 5;
+
+  const startIndex = (currentPage - 1) * pageSize;
+
+  const paginatedUsers = filteredUsers?.slice(
+    startIndex,
+    startIndex + pageSize
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -132,60 +163,67 @@ const AdminTradingSession = (props: Props) => {
       </Modal>
       {usersInfo?.length > 0 && (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <h2 className="font-bold text-xl mb-5">ALL TRADES SESSIONS</h2>
-          <div className="max-w-full overflow-x-auto">
+          <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+            ALL TRADES SESSIONS
+          </h2>
+          <SearchBar
+            classname="mb-5"
+            onSearch={setSearchTerm}
+            searchTerm={searchTerm}
+          />
+          <div className="max-w-full overflow-x-auto no-scrollbar">
             <table className="w-full table-auto">
               <thead>
-                <tr className="bg-primary text-left dark:bg-meta-4">
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                <tr className=" text-left border-2 ">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     S/N
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                     Fullname
                   </th>
-                  <th className="min-w-[160px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[160px] py-4 px-4 font-medium text-black dark:text-black">
                     Trade Type
                   </th>
-                  <th className="min-w-[130px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[130px] py-4 px-4 font-medium text-black dark:text-black">
                     Trade Option
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-black">
                     Pairs
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Lot Size
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                     Entry Price
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-black">
                     Stop Loss
                   </th>
-                  <th className="min-w-[120px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-black">
                     Take Profit
                   </th>
 
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Profit
                   </th>
-                  <th className="min-w-[160px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[160px] py-4 px-4 font-medium text-black dark:text-black">
                     Date
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
                     Result
                   </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {history.map(
+                {paginatedUsers.map(
                   (userHistory: UserTradeHistoriesProps, key: number) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <h5 className="text-black  dark:text-white">
-                          {key + 1}
+                          {userHistory?.userId}
                         </h5>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -270,6 +308,11 @@ const AdminTradingSession = (props: Props) => {
               </tbody>
             </table>
           </div>
+          <Pagination
+            totalPages={Math.ceil(filteredUsers?.length / pageSize)}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </AdminLayout>

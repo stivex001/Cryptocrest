@@ -10,7 +10,7 @@ export default function Plans() {
 					Accounts tailored to your trading style
 				</h2>
 				<p className="xl:w-[40%] mx-auto">
-					Investinspire has accounts for both new and more active traders. Check which fits and
+					CryptoCrest has accounts for both new and more active traders. Check which fits and
 					you’re set to go.
 				</p>
 			</div>

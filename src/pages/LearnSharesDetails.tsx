@@ -10,25 +10,20 @@ import { PriceDetermination } from "../components/educations/PriceDetermination"
 type Props = {};
 
 const LearnSharesDetails = (props: Props) => {
-  const params = useParams();
+	const params = useParams();
 
-  const details = shareCFData?.find((data) => data?.title === params.id);
-  console.log(details, "detauk");
+	const details = shareCFData?.find((data) => data?.title === params.id);
 
-  return (
-    <MainLayout>
-      <section className="max-w-4xl mx-auto px-6 py-16 ">
-        {details?.symbol === "share" && (
-          <ShareTrading details={details} />
-        )}
-        {details?.symbol === "short" && <ShortIPO details={details} />}
-        {details?.symbol === "upcoming" && <UpcomingIPO details={details} />}
-        {details?.symbol === "determines" && (
-          <PriceDetermination details={details} />
-        )}
-      </section>
-    </MainLayout>
-  );
+	return (
+		<MainLayout>
+			<section className="max-w-4xl mx-auto px-6 py-16 ">
+				{details?.symbol === "share" && <ShareTrading details={details} />}
+				{details?.symbol === "short" && <ShortIPO details={details} />}
+				{details?.symbol === "upcoming" && <UpcomingIPO details={details} />}
+				{details?.symbol === "determines" && <PriceDetermination details={details} />}
+			</section>
+		</MainLayout>
+	);
 };
 
 export default LearnSharesDetails;

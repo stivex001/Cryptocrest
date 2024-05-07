@@ -4,9 +4,9 @@ import { AdminCardDataStats } from "../components/dashboards/CardDataStats";
 import { FaUsers } from "react-icons/fa";
 import { IoWalletOutline } from "react-icons/io5";
 import { MdOutlineVerifiedUser } from "react-icons/md";
-import { StockMarket } from "react-ts-tradingview-widgets";
-import DashboardTable from "../components/dashboards/DashboardTable";
-import { AccountSummary } from "../components/dashboards/AccountSummary";
+// import { StockMarket } from "react-ts-tradingview-widgets";
+// import DashboardTable from "../components/dashboards/DashboardTable";
+// import { AccountSummary } from "../components/dashboards/AccountSummary";
 
 type Props = {};
 
@@ -44,14 +44,14 @@ const Dashboard = (props: Props) => {
             url="/admin/withdrawals"
           />
         </div>
-        <StockMarket
-          // colorTheme=""
+        {/* <StockMarket
+          colorTheme=""
           height={600}
           width="100%"
           showChart
         ></StockMarket>
         <DashboardTable />
-        <AccountSummary />
+        <AccountSummary /> */}
       </div>
     </AdminLayout>
   );

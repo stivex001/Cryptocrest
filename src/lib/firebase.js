@@ -6,9 +6,9 @@ import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyDSH7s_vN63klijoB0e7ivAb8jyx5F5LPE",
-	authDomain: "investinspire-3b5e4.firebaseapp.com",
-	projectId: "investinspire-3b5e4",
-	storageBucket: "investinspire-3b5e4.appspot.com",
+	authDomain: "CryptoCrest-3b5e4.firebaseapp.com",
+	projectId: "CryptoCrest-3b5e4",
+	storageBucket: "CryptoCrest-3b5e4.appspot.com",
 	messagingSenderId: "861782288484",
 	appId: "1:861782288484:web:101c77644ccafe960ed771",
 };

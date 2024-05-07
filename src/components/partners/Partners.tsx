@@ -13,7 +13,7 @@ export default function Partners() {
 
 	return (
 		<section className="max-w-7xl mx-auto my-24">
-			<h3 className="font-extrabold text-3xl mb-10">Who Trusts InvestInspire</h3>
+			<h3 className="font-extrabold text-3xl mb-10">Who Trusts CryptoCrest</h3>
 			<div className="grid grid-cols-3 items-center gap-x-10">
 				<PartnersCard
 					title="Media"
