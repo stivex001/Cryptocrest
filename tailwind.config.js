@@ -25,6 +25,7 @@ module.exports = {
         // gradient: "linear-gradient(to bottom,var(--white),var(--primary-50))",
         authImg: "url('/src/images/authImage.jpg')",
         aboutImg: "url('/src/images/modern.jpg')",
+        pattern2: "url('/src/images/pattern-2.png')",
       },
       colors: {
         gray1: "#f7f6fe",
@@ -50,6 +51,10 @@ module.exports = {
         warning: "#FFA70B",
         "gray-2": "#F7F9FC",
         whiter: "#F5F7FD",
+        white1: "#e5e5e5",
+        darkBlue: "#12326B",
+        black4: "#121212",
+        green: "#059669",
       },
       boxShadow: {
         default: "0px 8px 13px -3px rgba(0, 0, 0, 0.07)",

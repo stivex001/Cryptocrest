@@ -1,59 +1,64 @@
-import spreads from "../../images/spread.webp";
-import cfd from "../../images/cfd.webp";
-import broker from "../../images/trusted-broker.webp";
-import reliable from "../../images/reliable.jpeg";
+import { FaUserShield, FaBuilding, FaHeadset, FaUser } from "react-icons/fa";
 
 export default function WhyChooseUs() {
-	return (
-		<section className="max-w-7xl mx-auto my-20 px-6 xl:px-0">
-			<div className="text-center mb-10">
-				<h3 className="uppercase mb-4 text-lg">Why CryptoCrest?</h3>
-				<h2 className=" font-bold max-w-xl mx-auto xl:text-4xl">
-					The Tools You Need to Reach Your Forex Trading Potential
-				</h2>
-			</div>
-			<div className="grid gap-10 xl:grid-cols-2 ">
-				<TradeOptionsCard
-					img={spreads}
-					title="Razor Sharp Spreads"
-					description="Trade FX from 0.0 pip spreads on 14 pairs with our Razor account, with deep liquidity and no requotes"
-				/>
-				<TradeOptionsCard
-					img={reliable}
-					title="Fast & Reliable"
-					description="Fast execution, 99.90% fill rate^, and no dealing desk intervention"
-				/>
-				<TradeOptionsCard
-					img={cfd}
-					title="1200+ CFDs to Trade"
-					description="FX, Indices, Commodities, Shares and more"
-				/>
-				<TradeOptionsCard
-					img={broker}
-					title="Trusted Broker"
-					description="Award winning Forex Broker chosen by 400,000 traders globally"
-				/>
-			</div>
-		</section>
-	);
+  return (
+    <section className=" px-3 xl:px-0 py-28 bg-black text-white1">
+      <div className="max-w-[1240px] mx-auto">
+        <div className="text-center">
+          <h2 className="text-3xl font-semibold lg:text-5xl lg:font-extrabold mb-10">
+            Why Universal Cryptocrest Trade?
+          </h2>
+          <p className="lg:max-w-[70%] mx-auto leading-7 mb-24 text-xl">
+            At Universal Cryptocrest Trade, our trading approach seamlessly
+            combines the insights of experienced human discretionary traders
+            with strategic hedge execution decisions driven by client trading
+            behavior and account performance. We boast an extensive range of
+            more than 600 products, featuring narrow spreads, transparent
+            pricing, and robust platforms. Supported by an exceptional level of
+            customer service, we are dedicated to providing an unmatched trading
+            experience for our clients.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-3 xl:grid-cols-4 xl:gap-8">
+          <WCUCard
+            img={<FaUserShield />}
+            text="Secure and Stable"
+            description="We provide a trusted and intuitive platform for users, of all experience levels, to trade how they want."
+          />
+          <WCUCard
+            img={<FaBuilding />}
+            text="Regulated Broker"
+            description="Universal Cryptocrest Trade operates in full compliance with SEC and CFTC, ensuring a secure environment for your investments"
+          />
+          <WCUCard
+            img={<FaHeadset />}
+            text="24/7 Support"
+            description="Reach out to our support team with any issues and we'll help you resolve them as quickly as possible."
+          />
+          <WCUCard
+            img={<FaUser />}
+            text="Expertise and Experience:"
+            description="Our team consists of seasoned professionals experienced in cryptocurrency, blockchain and traditional finance.
+"
+          />
+        </div>
+      </div>
+    </section>
+  );
 }
 
-interface TradeOptionsCardProps {
-	img: string;
-	title: string;
-	description: string;
+interface WCUCardProps {
+  img: React.ReactNode;
+  text: string;
+  description?: string;
 }
 
-const TradeOptionsCard = ({ img, title, description }: TradeOptionsCardProps) => {
-	return (
-		<div className="py-10 items-center bg-secondary rounded-lg z-10 xl:flex">
-			<div className="pl-6 xl:w-[40%]">
-				<h3 className="font-semibold text-2xl mb-2">{title}</h3>
-				<p className="text-sm">{description}</p>
-			</div>
-			<div className="xl:w-[60%]">
-				<img src={img} alt="" className="rounded-lg" />
-			</div>
-		</div>
-	);
+const WCUCard = ({ img, text, description }: WCUCardProps) => {
+  return (
+    <div className="flex flex-col justify-center w-full bg-black4 py-12 px-6 rounded-md">
+      <div className="text-4xl text-primary flex items-center">{img}</div>
+      <span className="text-lg mt-5 mb-3 font-bold">{text}</span>
+      <p className="h-20">{description}</p>
+    </div>
+  );
 };

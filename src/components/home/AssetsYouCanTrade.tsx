@@ -9,9 +9,14 @@ import { Link } from "react-router-dom";
 export default function AssetsYouCanTrade() {
   return (
     <section className="max-w-7xl mx-auto my-24 px-6">
-      <h3 className="text-center mb-8">GLOBAL MARKET AT YOUR FINGERTIPS</h3>
-      <h2 className="text-2xl xl:text-4xl text-center font-semibold mb-16">
-        Trade your favourite instruments from around the world
+      <h3 className="text-center text-3xl lg:text-4xl font-bold mb-10">
+        GLOBAL MARKET AT YOUR FINGERTIPS
+      </h3>
+      <h2 className="lg:max-w-[60%] mx-auto leading-7 text-lg text-center mb-10">
+        Universal Cryptocrest Trade Insights lets you diversify your portfolio
+        by investing in a global selection of stocks, ETFs, Futures, carefully
+        screened and curated into portfolios just for you. Trade more than 600
+        products including Forex, Share CFDs, Commodities, Indices, and Metals.
       </h2>
       <div className="grid xl:grid-cols-3 gap-10">
         <TradingOptionsCard
