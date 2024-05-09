@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useRef } from "react";
-import herobg from "public/images/hero-bg.jpg";
 export default function VideoBackground({ children }: { children: ReactNode }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 

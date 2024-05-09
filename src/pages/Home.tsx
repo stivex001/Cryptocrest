@@ -10,6 +10,7 @@ import Plans from "../components/home/Plans";
 import Platforms from "../components/home/Platforms";
 import WhyTradeCrypto from "../components/home/WhyTradeCrypto";
 import FairPricing from "../components/home/FairPricing";
+import Reviews from "../components/home/Reviews";
 
 export default function Home() {
   return (
@@ -22,7 +23,8 @@ export default function Home() {
       <FairPricing />
       <TradeWithUs />
       <Plans />
-      <Stats />
+      <Reviews />
+      {/* <Stats /> */}
       <Steps />
       <Platforms />
     </MainLayout>
