@@ -35,7 +35,7 @@ export default function VideoBackground({ children }: { children: ReactNode }) {
         loop
         muted
         preload="auto"
-        poster="../images/heroImg.webp"
+        poster="/hero-bg.jpg"
         className="w-full h-full object-cover absolute top-0 xl:top-0 left-0 z-0"
       >
         <source src="/video2.mp4" type="video/mp4" />

@@ -573,3 +573,24 @@ export const verifications = [
     id: "2",
   },
 ];
+
+export const notifications = [
+  {
+    userId: "1",
+    date: "20th Apr, 2024",
+    noteTitle: "Deposit Bonus",
+    status: "Inactive",
+    fullname: "Johnyy Doese",
+    id: "2",
+    message: "Deposit through the deposit page to get a $500 bonus on your deposits through 12/25.",
+  },
+  {
+    userId: "2",
+    date: "20th Apr, 2024",
+    noteTitle: "Withdrawal Bonus",
+    status: "Active",
+    fullname: "Lionel Messi",
+    id: "2",
+    message: "Withdraw through the withdrawal page to get a $500 bonus on your deposits through 12/25.",
+  },
+];

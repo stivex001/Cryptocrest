@@ -31,7 +31,7 @@ export default function MobileNav() {
         <div className="w-[50%]">
           <Link to="/">
             {/* <img src={logo} alt="" /> */}
-			CryptoCrest
+            CryptoCrest
           </Link>
         </div>
         <div
@@ -44,7 +44,7 @@ export default function MobileNav() {
       <ul
         className={`${
           isNavOpen ? "block" : "hidden"
-        } fixed bg-gray-200 left-0 top-[93px] w-full flex flex-col gap-y-8 px-6 py-6 mx-auto`}
+        } fixed bg-gray-200 z-[100] left-0 top-[93px] w-full flex flex-col gap-y-8 px-6 py-6 mx-auto`}
       >
         <li className="" onClick={() => setIsAboutMenuOpen(!isAboutMenuOpen)}>
           <div className="font-medium text-lg hover:text-primary-hover cursor-pointer">

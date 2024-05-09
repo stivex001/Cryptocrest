@@ -66,14 +66,14 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }: Props) => {
 
   return (
     <aside
-      className={`absolute left-0 top-0 z-[9999] flex h-screen w-[16.125rem] flex-col overflow-y-hidden bg-primary duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-[9999] flex h-screen  flex-col overflow-y-hidden bg-primary duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       <div className="flex items-center justify-between gap-2 px-6 py-6 lg:py-7 text-white">
         <Link to={`/${currentPath}/dashboard`}>
           {/* <img src={logo} alt="Logo" /> */}
-		  Crypto Crest
+          Crypto Crest
         </Link>
 
         <button
@@ -251,9 +251,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }: Props) => {
               {pathname.includes("admin") && (
                 <li>
                   <Link
-                    to="/admin/dashboard"
+                    to="/admin/notifications"
                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-primary-hover dark:hover:bg-meta-4 ${
-                      pathname.includes("/dashboard/notification") &&
+                      pathname.includes("/admin/notifications") &&
                       "bg-primary-hover dark:bg-meta-4"
                     }`}
                   >

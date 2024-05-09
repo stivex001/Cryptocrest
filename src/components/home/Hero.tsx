@@ -19,8 +19,8 @@ export default function Hero() {
 
   return (
     <>
-      <div className="relative xl:min-h-[90vh] mt-28 xl:mt-20 ">
-        <div
+      <div className="relative xl:min-h-[90vh]  ">
+        {/* <div
           className="!visible hidden bg-[#e2e5ec]"
           id="referral"
           data-te-collapse-item
@@ -54,7 +54,7 @@ export default function Hero() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         {/* <button
           className="h-10 w-full bg-[#ff5a23] font-extrabold text-sm"
           type="button"
