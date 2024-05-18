@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyDSH7s_vN63klijoB0e7ivAb8jyx5F5LPE",
-	authDomain: "CryptoCrest-3b5e4.firebaseapp.com",
-	projectId: "CryptoCrest-3b5e4",
-	storageBucket: "CryptoCrest-3b5e4.appspot.com",
-	messagingSenderId: "861782288484",
-	appId: "1:861782288484:web:101c77644ccafe960ed771",
+	apiKey: "AIzaSyCCYK6x_expkk51PsCPMeQk_iyonzhgo-w",
+	authDomain: "cryptocrest-aefe2.firebaseapp.com",
+	projectId: "cryptocrest-aefe2",
+	storageBucket: "cryptocrest-aefe2.appspot.com",
+	messagingSenderId: "1092837750169",
+	appId: "1:1092837750169:web:f01f6bd4b9d2fdefa54f08",
 };
 
 // Initialize Firebase

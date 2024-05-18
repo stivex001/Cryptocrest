@@ -7,20 +7,20 @@ import { TickerTape } from "react-ts-tradingview-widgets";
 import { useEffect } from "react";
 
 export default function Hero() {
-  // useEffect(() => {
-  //   const init = async () => {
-  //     const { Collapse, Dropdown, Ripple, initTE } = await import(
-  //       "tw-elements"
-  //     );
-  //     initTE({ Collapse, Dropdown, Ripple });
-  //   };
-  //   init();
-  // }, []);
+	// useEffect(() => {
+	//   const init = async () => {
+	//     const { Collapse, Dropdown, Ripple, initTE } = await import(
+	//       "tw-elements"
+	//     );
+	//     initTE({ Collapse, Dropdown, Ripple });
+	//   };
+	//   init();
+	// }, []);
 
-  return (
-    <>
-      <div className="relative xl:min-h-[90vh]  ">
-        {/* <div
+	return (
+		<>
+			<div className="relative xl:min-h-[90vh]  ">
+				{/* <div
           className="!visible hidden bg-[#e2e5ec]"
           id="referral"
           data-te-collapse-item
@@ -32,11 +32,11 @@ export default function Hero() {
                 Cryptocrest Partner
               </h2>
               <p className="lg:text-lg mb-10">
-                For a limited time only, Universal Cryptocrest Trade is proud to
+                For a limited time only, cryptocrest Trade is proud to
                 announce the Cryptocrest Partner Campaign for Referrers!
                 Partners, will have the opportunity to earn extra bonus on top
                 of your rebate, simply by referring new clients. Your business
-                can go further with Crytosphere Partner by Universal Cryptocrest
+                can go further with Crytosphere Partner by Cryptocrest
                 Trade*. T&Cs apply.
               </p>
               <Link
@@ -55,7 +55,7 @@ export default function Hero() {
             </div>
           </div>
         </div> */}
-        {/* <button
+				{/* <button
           className="h-10 w-full bg-[#ff5a23] font-extrabold text-sm"
           type="button"
           data-te-collapse-init
@@ -66,34 +66,32 @@ export default function Hero() {
         >
           REFERRAL PARTNER BONUS PROMOTION
         </button> */}
-        <VideoBackground>
-          <div className="min-h-[85vh] md:min-h-[50vh] xl:min-h-[85vh] flex items-center  bg-right text-white1 pt-10 ">
-            <div className="px-6 xl:px-0 grid text-center lg:text-left lg:flex lg:gap-20 items-center max-w-[1240px] mx-auto">
-              <div className="mb-20 lg:mb-0 xl:w-[55%]">
-                <div className="mb-10">
-                  <h1 className="text-4xl lg:text-[4rem] lg:leading-[120%]  mb-5">
-                    Digital assets, investments and trading
-                  </h1>
-                  <p className="text-lg mb-4 xl:text-xl">
-                    Join millions of users, from beginners to professionals, who
-                    use Universal Cryptocrest Trade to purchase crypto, trade,
-                    and manage their investments in a smarter way.
-                  </p>
-                </div>
-                <div className="lg:flex items-center gap-2">
-                  <Link to="/signup">
-                    <Button btnText="Create Account" className="bg-primary" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </VideoBackground>
-      </div>
-      <div className="relative z-50">
-        <TickerTape colorTheme="light"></TickerTape>
-      </div>
-    </>
-    
-  );
+				<VideoBackground>
+					<div className="min-h-[85vh] md:min-h-[50vh] xl:min-h-[85vh] flex items-center  bg-right text-white1 pt-10 ">
+						<div className="px-6 xl:px-0 grid text-center lg:text-left lg:flex lg:gap-20 items-center max-w-[1240px] mx-auto">
+							<div className="mb-20 lg:mb-0 xl:w-[55%]">
+								<div className="mb-10">
+									<h1 className="text-4xl lg:text-[4rem] lg:leading-[120%]  mb-5">
+										Digital assets, investments and trading
+									</h1>
+									<p className="text-lg mb-4 xl:text-xl">
+										Join millions of users, from beginners to professionals, who use Cryptocrest
+										Trade to purchase crypto, trade, and manage their investments in a smarter way.
+									</p>
+								</div>
+								<div className="lg:flex items-center gap-2">
+									<Link to="/signup">
+										<Button btnText="Create Account" className="bg-primary" />
+									</Link>
+								</div>
+							</div>
+						</div>
+					</div>
+				</VideoBackground>
+			</div>
+			<div className="relative z-50">
+				<TickerTape colorTheme="light"></TickerTape>
+			</div>
+		</>
+	);
 }
