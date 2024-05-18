@@ -57,19 +57,6 @@ const Settings = () => {
 
 		if (image) {
 			updateProfilePicture(image);
-			// toast.success("Profile Picture updated Successfully", {
-			// 	duration: 6000,
-			// 	position: "top-center",
-			// 	style: {
-			// 		padding: "16px",
-			// 		fontWeight: "bold",
-			// 		minWidth: "300px",
-			// 	},
-			// 	iconTheme: {
-			// 		primary: "#0064fa",
-			// 		secondary: "#FFFF",
-			// 	},
-			// });
 		}
 	};
 
@@ -91,8 +78,6 @@ const Settings = () => {
 
 	return (
 		<>
-			{/* <Toaster />
-			<Breadcrumb pageName="Settings" /> */}
 			<AdminLayout>
 				<div className="mx-auto max-w-270">
 					<div className="grid grid-cols-5 gap-8">

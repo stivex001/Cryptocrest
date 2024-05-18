@@ -1,242 +1,234 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import Modal from "../components/Modals/Modal";
-import { usersInfo } from "../components/dashboards/data";
-import UploadButton3 from "../components/sharedUi/UploadButton3";
 import { SearchBar } from "../components/sharedUi/Searchbar";
 import { Pagination } from "../components/sharedUi/Pagination";
-import { User } from "../types/types";
+import { AccountState } from "../types/types";
+import { useAdminContext } from "../context/AdminContext";
 
 type Props = {};
 
 const Account = (props: Props) => {
-  const [showModal, setShowModal] = useState(false);
-  const [accountInput, setAccountInput] = useState({
-    balance: "",
-    profit: "",
-    bonus: "",
-  });
-  const [userId, setUserId] = useState("");
-  const [loading, setLoading] = useState<{ [currentUserId: string]: boolean }>(
-    {}
-  );
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredUsers, setFilteredUsers] = useState<User[]>(usersInfo);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+	const [showModal, setShowModal] = useState(false);
+	const [accountInput, setAccountInput] = useState({
+		balance: "",
+		profit: "",
+		bonus: "",
+	});
+	const [userId, setUserId] = useState("");
+	const [loading, setLoading] = useState<{ [currentUserId: string]: boolean }>({});
+	const [searchTerm, setSearchTerm] = useState<string>("");
+	const [filteredAccount, setFilteredAccount] = useState<AccountState[]>([]);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+	const { state, updateAccount } = useAdminContext();
 
-  useEffect(() => {
-    const results = usersInfo?.filter(
-      (user) =>
-        user?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.firstname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.mobile?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.lastname?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+	const accounts = state.accounts;
 
-    setFilteredUsers(results);
-  }, [searchTerm]);
+	const closeModal = () => {
+		setShowModal(false);
+	};
 
-  const pageSize = 5;
+	useEffect(() => {
+		let results = accounts;
 
-  const startIndex = (currentPage - 1) * pageSize;
+		// Check if there is a search term
+		if (searchTerm.length) {
+			// Filter the results based on the search term
+			results = accounts.filter(
+				(acct: any) =>
+					acct.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					acct.balance.toString().includes(searchTerm) ||
+					acct.profit.toString().includes(searchTerm) ||
+					acct.bonus.toString().includes(searchTerm)
+			);
+		}
 
-  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + pageSize);
+		// Update the state with the filtered results
+		setFilteredAccount(results);
+	}, [searchTerm, accounts]);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+	const pageSize = 5;
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setAccountInput((prev) => ({ ...prev, [name]: value }));
-  };
+	const startIndex = (currentPage - 1) * pageSize;
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+	const paginatedUsers = filteredAccount.slice(startIndex, startIndex + pageSize);
 
-    setLoading((prevLoading) => ({ ...prevLoading, [userId]: true }));
+	const handlePageChange = (page: number) => {
+		setCurrentPage(page);
+	};
 
-    closeModal();
-  };
+	const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value } = e.target;
+		setAccountInput((prev) => ({ ...prev, [name]: value }));
+	};
 
-  const handleClickToggleModal = (
-    user: any,
-    balance: string,
-    profit: string,
-    bonus: string
-  ) => {
-    setShowModal(true);
-    setUserId(user);
-    setAccountInput((prev) => {
-      return { ...prev, balance, profit, bonus };
-    });
-  };
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (userId && accountInput) {
+			updateAccount(userId, accountInput);
+		}
 
-  return (
-    <AdminLayout>
-      <Modal
-        show={showModal}
-        closeModal={closeModal}
-        title="Update Balance"
-        width={500}
-        height={500}
-      >
-        <form onSubmit={handleSubmit}>
-          <div className="mb-5 mt-10">
-            <label className="mb-2.5 block font-medium text-black">
-              Account Balance
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="balance"
-                required
-                value={accountInput.balance}
-                onChange={handleInputChange}
-                placeholder="Balance"
-                className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
-              />
-            </div>
-          </div>
-          <div className="mb-5">
-            <label className="mb-2.5 block font-medium text-black">
-              Profit
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="profit"
-                required
-                value={accountInput.profit}
-                onChange={handleInputChange}
-                placeholder="Profit"
-                className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="mb-2.5 block font-medium text-black">Bonus</label>
-            <div className="relative">
-              <input
-                type="text"
-                name="bonus"
-                required
-                value={accountInput.bonus}
-                onChange={handleInputChange}
-                placeholder="Bonus"
-                className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
-              />
-            </div>
-          </div>
-          <div className="flex gap-x-4 mt-8">
-            <button
-              className="bg-meta-3 flex justify-center items-center text-black rounded-md font-medium px-8 py-2"
-              type="submit"
-            >
-              Update
-            </button>
-            <button
-              onClick={closeModal}
-              className="bg-danger flex justify-center items-center text-black rounded-md font-medium px-8 py-2"
-            >
-              Close
-            </button>
-          </div>
-        </form>
-      </Modal>
-      {usersInfo?.length > 0 && (
-        <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-          <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
-            ALL USERS BALANCE
-          </h2>
-          <SearchBar
-            classname="mb-5"
-            onSearch={setSearchTerm}
-            searchTerm={searchTerm}
-          />
-          <div className="max-w-full overflow-x-auto no-scrollbar">
-            <table className="w-full table-auto">
-              <thead>
-                <tr className="text-left border-2">
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
-                    S/N
-                  </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
-                    Fullname
-                  </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
-                    Balance
-                  </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
-                    Profit
-                  </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
-                    Bonus
-                  </th>
-                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedUsers?.map((userItem: any, key: number) => (
-                  <tr key={key}>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="text-black  dark:text-black">{userItem?.userId}</h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="font-medium text-black dark:text-black">
-                        {userItem?.firstname} {userItem?.lastname}
-                      </h5>
-                    </td>
+		closeModal();
+	};
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-black">
-                        ${userItem?.totalBalance}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-black">
-                        ${userItem.totalProfit}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-black">
-                        ${userItem.totalBonus}
-                      </p>
-                    </td>
+	const handleClickToggleModal = (uid: string, profit: string, balance: string, bonus: string) => {
+		setShowModal(true);
+		setUserId(uid);
+		setAccountInput((prev) => {
+			return { ...prev, balance, profit, bonus };
+		});
+	};
 
-                    <td className="border-b border-[#eee] py-5 px-4 flex items-center gap-x-2 dark:border-strokedark">
-                      <UploadButton3
-                        approveBtnClick={handleClickToggleModal}
-                        userId={userItem.userId}
-                        loading={loading[userItem.userId] || false}
-                        btnText="Update Account"
-                        balance={userItem.totalBalance}
-                        profit={userItem.totalProfit}
-                        bonus={userItem.totalBonus}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <Pagination
-            totalPages={Math.ceil(filteredUsers?.length / pageSize)}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      )}
-    </AdminLayout>
-  );
+	return (
+		<AdminLayout>
+			<Modal
+				show={showModal}
+				closeModal={closeModal}
+				title="Update Balance"
+				width={500}
+				height={500}
+			>
+				<form onSubmit={handleSubmit}>
+					<div className="mb-5 mt-10">
+						<label className="mb-2.5 block font-medium text-black">Account Balance</label>
+						<div className="relative">
+							<input
+								type="text"
+								name="balance"
+								required
+								value={accountInput.balance}
+								onChange={handleInputChange}
+								placeholder="Balance"
+								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+							/>
+						</div>
+					</div>
+					<div className="mb-5">
+						<label className="mb-2.5 block font-medium text-black">Profit</label>
+						<div className="relative">
+							<input
+								type="text"
+								name="profit"
+								required
+								value={accountInput.profit}
+								onChange={handleInputChange}
+								placeholder="Profit"
+								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+							/>
+						</div>
+					</div>
+					<div>
+						<label className="mb-2.5 block font-medium text-black">Bonus</label>
+						<div className="relative">
+							<input
+								type="text"
+								name="bonus"
+								required
+								value={accountInput.bonus}
+								onChange={handleInputChange}
+								placeholder="Bonus"
+								className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+							/>
+						</div>
+					</div>
+					<div className="flex gap-x-4 mt-8">
+						<button
+							className="bg-meta-3 flex justify-center items-center text-white rounded-md font-medium px-8 py-2"
+							type="submit"
+						>
+							Update
+						</button>
+						{/* <button
+							onClick={() => closeModal()}
+							className="bg-danger flex justify-center items-center text-white rounded-md font-medium px-8 py-2"
+						>
+							Close
+						</button> */}
+					</div>
+				</form>
+			</Modal>
+			{accounts?.length > 0 && (
+				<div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+					<h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+						ALL USERS BALANCE
+					</h2>
+					<SearchBar classname="mb-5" onSearch={setSearchTerm} searchTerm={searchTerm} />
+					<div className="max-w-full overflow-x-auto no-scrollbar">
+						<table className="w-full table-auto">
+							<thead>
+								<tr className="text-left border-2">
+									<th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+										S/N
+									</th>
+									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
+										Fullname
+									</th>
+									<th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+										Balance
+									</th>
+									<th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+										Profit
+									</th>
+									<th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+										Bonus
+									</th>
+									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
+										Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{paginatedUsers?.map((userItem: any, key: number) => (
+									<tr key={key}>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<h5 className="text-black  dark:text-black">{key + 1}</h5>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<h5 className="font-medium text-black dark:text-black">
+												{userItem.fullname}
+											</h5>
+										</td>
+
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<p className="text-black dark:text-black">${userItem?.balance}</p>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<p className="text-black dark:text-black">${userItem.profit}</p>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<p className="text-black dark:text-black">${userItem.bonus}</p>
+										</td>
+
+										<td className="border-b border-[#eee] py-5 px-4 flex items-center gap-x-2 dark:border-strokedark">
+											<button
+												onClick={() =>
+													handleClickToggleModal(
+														userItem.uid || "",
+														userItem.profit,
+														userItem.balance,
+														userItem.bonus
+													)
+												}
+												className="w-[150px] rounded-md  bg-meta-3 text-white py-2 px-3 flex items-center justify-center  gap-x-2"
+											>
+												Update Account
+											</button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+					<Pagination
+						totalPages={Math.ceil(filteredAccount?.length / pageSize)}
+						currentPage={currentPage}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			)}
+		</AdminLayout>
+	);
 };
 
 export default Account;
