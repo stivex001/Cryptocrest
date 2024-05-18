@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../images/LOGO-DARK.svg";
+import logo from "../images/crest-logo.svg";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 

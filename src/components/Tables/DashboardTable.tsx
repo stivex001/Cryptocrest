@@ -4,7 +4,7 @@ import { tradesData } from "../dashboards/data";
 const DashboardTable = () => {
   return (
     <>
-      {tradesData.length > 0 && (
+      {tradesData?.length > 0 && (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <h2 className="font-bold text-xl mb-5">Latest Trades</h2>
           <div className="max-w-full overflow-x-auto">
@@ -41,58 +41,58 @@ const DashboardTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {tradesData.map((tradeItem: Trade, key: number) => (
+                {tradesData?.map((tradeItem: Trade, key: number) => (
                   <tr key={key}>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <h5 className="text-black  dark:text-white">
-                        {tradeItem.tradeType}
+                        {tradeItem?.tradeType}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <h5 className="font-medium text-black dark:text-white">
-                        {tradeItem.tradeOption}
+                        {tradeItem?.tradeOption}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <h5 className="font-medium text-black dark:text-white">
-                        {tradeItem.pairs}
+                        {tradeItem?.pairs}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        ${tradeItem.entry}
+                        ${tradeItem?.entry}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {tradeItem.lotSize}
+                        {tradeItem?.lotSize}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {tradeItem.takeProfit}
+                        {tradeItem?.takeProfit}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {tradeItem.stopLoss}
+                        {tradeItem?.stopLoss}
                       </p>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">
-                        {tradeItem.profit}
+                        {tradeItem?.profit}
                       </p>
                     </td>
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p
                         className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                          tradeItem.status === "Win"
+                          tradeItem?.status === "Win"
                             ? "text-success bg-success"
                             : "text-warning bg-warning"
                         }`}
                       >
-                        {tradeItem.status}
+                        {tradeItem?.status}
                       </p>
                     </td>
                   </tr>
