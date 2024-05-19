@@ -3,8 +3,7 @@ import { auth, db } from "../lib/firebase";
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-import { FaEthereum } from "react-icons/fa";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export interface UserState {
 	uid: string;
@@ -26,6 +25,8 @@ export interface UserState {
 	subscription: SubscriptionState;
 	trades: TradeState[];
 	bitcoin: number;
+	joinedDate: string;
+	admin: boolean;
 }
 
 interface Asset {
@@ -53,6 +54,7 @@ interface User {
 	gender: string;
 	uid: string;
 	photoUrl: string;
+	joinedDate: string;
 }
 
 export interface AccountState {
@@ -114,6 +116,7 @@ interface UserContextType {
 	notify: (msg: string) => void;
 	notifyError: (msg: string) => void;
 	notifyPromise: (loading: string, success: string, error: string, promise: any) => void;
+	loading: boolean;
 }
 
 const initialState: UserState = {
@@ -132,10 +135,12 @@ const initialState: UserState = {
 	trades: [],
 	withdrawals: [],
 	deposits: [],
-	verification: { document: null, status: "not verified" },
+	verification: { document: null, status: "not-verified" },
 	subscription: { plan: "", amount: "", duration: "", date: "" },
 	bitcoin: 0,
 	assets: [],
+	joinedDate: "",
+	admin: false,
 };
 
 // Step 3: Define Action Types
@@ -174,6 +179,7 @@ const UserContext = createContext<UserContextType>({
 	notify: () => null,
 	notifyError: () => null,
 	notifyPromise: () => null,
+	loading: false,
 });
 
 const userReducer = (state: UserState, action: Action): UserState => {
@@ -214,7 +220,7 @@ const userReducer = (state: UserState, action: Action): UserState => {
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	const [state, dispatch] = useReducer(userReducer, initialState);
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
+	// const [error, setError] = useState<string | null>(null);
 
 	const currentUser = state.uid;
 
@@ -228,6 +234,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 		return () => {
 			unSub();
 		};
+		//eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
@@ -274,6 +281,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 	};
 
 	const fetchUserData = useCallback(async (uid: string) => {
+		setLoading(true);
+
 		const userDocRef = doc(db, "users", uid);
 		const accountDocRef = doc(db, "accounts", uid);
 		const depositDocRef = doc(db, "deposits", uid);
@@ -310,42 +319,50 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 		if (verificationDocSnap.exists())
 			dispatch({
 				type: "VERIFICATION_STATUS",
-				payload: verificationDocSnap.data() as VerificationState,
+				payload: verificationDocSnap.data().verification as VerificationState,
 			});
 		if (subscriptionDocSnap.exists())
 			dispatch({
 				type: "SUBSCRIPTION",
 				payload: subscriptionDocSnap.data().subscription as SubscriptionState,
 			});
+
 		if (tradeDocSnap.exists())
 			dispatch({
 				type: "TRADES",
 				payload: tradeDocSnap.data().trades as TradeState[],
 			});
+
+		setLoading(false);
 	}, []);
 
-	const addDeposit = useCallback(async (payload: DepositState) => {
-		if (payload) {
-			try {
-				const addDepositRef = doc(db, "deposits", currentUser);
-				await toast.promise(updateDoc(addDepositRef, { deposits: arrayUnion(payload) }), {
-					loading: "Sending Payment Notification...",
-					success: "Payment Notification Sent Successfully",
-					error: "Error Occurred, Try Again",
-				});
+	const addDeposit = useCallback(
+		async (payload: DepositState) => {
+			if (payload) {
+				const newPayload = { ...payload, uid: currentUser };
+				try {
+					const addDepositRef = doc(db, "deposits", currentUser);
+					await toast.promise(updateDoc(addDepositRef, { deposits: arrayUnion(newPayload) }), {
+						loading: "Sending Payment Notification...",
+						success: "Payment Notification Sent Successfully",
+						error: "Error Occurred, Try Again",
+					});
 
-				dispatch({ type: "ADD_DEPOSIT", payload });
-			} catch (error) {
-				console.log(error);
+					dispatch({ type: "ADD_DEPOSIT", payload });
+				} catch (error) {
+					console.log(error);
+				}
 			}
-		}
-	}, []);
+		},
+		[currentUser]
+	);
 
 	const addWithdrawal = async (payload: WithdrawalState) => {
 		if (payload) {
+			const newPayload = { ...payload, uid: currentUser };
 			try {
 				const addWithdrawalRef = doc(db, "withdrawals", currentUser);
-				await toast.promise(updateDoc(addWithdrawalRef, { withdrawals: arrayUnion(payload) }), {
+				await toast.promise(updateDoc(addWithdrawalRef, { withdrawals: arrayUnion(newPayload) }), {
 					loading: "Sending Withdrawal Notification...",
 					success: "Withdrawal Request Sent Successfully",
 					error: "Error Occurred, Try Again",
@@ -373,7 +390,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 		if (payload) {
 			try {
 				const addVerificationRef = doc(db, "verifications", currentUser);
-				await toast.promise(setDoc(addVerificationRef, payload), {
+				const updatedVerification = {
+					verification: payload,
+				};
+
+				await toast.promise(setDoc(addVerificationRef, updatedVerification), {
 					loading: "Uploading Document...",
 					success: "Document Uploaded Successfully",
 					error: "Error Occurred, Try Again",
@@ -446,6 +467,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 				notify,
 				notifyError,
 				notifyPromise,
+				loading,
 			}}
 		>
 			{children}

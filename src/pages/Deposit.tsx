@@ -52,7 +52,7 @@ const Deposit = (props: Props) => {
 				const payload = {
 					method: formData.paymentMethod,
 					amount: formData.amount,
-					status: "Pending",
+					status: "pending",
 					id: uuidv4(),
 					screenshot: imgUrl,
 					date: new Date().toDateString(),
@@ -70,34 +70,34 @@ const Deposit = (props: Props) => {
 
 	return (
 		<AdminLayout>
-			<div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-				<div className="border-b border-stroke py-4 px-6 dark:border-strokedark">
-					<h3 className="font-medium text-black dark:text-white">DEPOSIT USING BITCOIN</h3>
+			<div className="mb-10 rounded-sm border  bg-boxdark shadow-default border-strokedark ">
+				<div className="border-b  py-4 px-6 border-strokedark">
+					<h3 className="font-medium text-white">DEPOSIT USING BITCOIN</h3>
 				</div>
 				<div className="p-6">
 					<div className="mb-4">
-						<label className="mb-2.5 block text-black dark:text-white">BITCOIN WALLET</label>
+						<label className="mb-2.5 block text-white dark:text-white">BITCOIN WALLET</label>
 						<input
 							type="text"
 							readOnly
 							value="bc1qma2yfzvsquhhj0yq7rn7qxmaj56wh72h0hfmnk"
-							className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
+							className="w-full rounded border-[1.5px] border-strokedark bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
 						/>
 					</div>
 				</div>
 			</div>
-			<div className="mb-5 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-				<div className="border-b border-stroke py-4 px-6 dark:border-strokedark">
-					<h3 className="font-medium text-black dark:text-white">DEPOSIT USING ETHEREUM</h3>
+			<div className="mb-5 rounded-sm border  bg-boxdark shadow-default border-strokedark ">
+				<div className="border-b  py-4 px-6 border-strokedark">
+					<h3 className="font-medium text-white dark:text-white">DEPOSIT USING ETHEREUM</h3>
 				</div>
 				<div className="p-6">
 					<div className="mb-4">
-						<label className="mb-2.5 block text-black dark:text-white">ETHEREUM WALLET</label>
+						<label className="mb-2.5 block text-white dark:text-white">ETHEREUM WALLET</label>
 						<input
 							type="text"
 							readOnly
 							value="0x51C5D2a3BF1441Fb3BA8b10f3d33C37ae80565E2"
-							className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-meta-3 active:border-meta-3 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
+							className="w-full rounded border-[1.5px] border-strokedark bg-transparent py-3 px-5 font-medium outline-none transition focus:border-meta-3 active:border-meta-3 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
 						/>
 					</div>
 				</div>
@@ -126,7 +126,7 @@ const Deposit = (props: Props) => {
 				</p>
 				<form onSubmit={handleSubmit}>
 					<div className="relative z-20 bg-transparent mb-4">
-						<label className="mb-2.5 block text-black dark:text-white">Select Payment Method</label>
+						<label className="mb-2.5 block text-white dark:text-white">Select Payment Method</label>
 						<select
 							name="paymentMethod"
 							value={formData.paymentMethod}
@@ -140,7 +140,7 @@ const Deposit = (props: Props) => {
 						</select>
 					</div>
 					<div className="relative z-20 bg-transparent mb-4">
-						<label className="mb-2.5 block text-black dark:text-white">Amount In Dollar($)</label>
+						<label className="mb-2.5 block text-white dark:text-white">Amount In Dollar($)</label>
 						<input
 							type="text"
 							placeholder="5000"
@@ -152,7 +152,7 @@ const Deposit = (props: Props) => {
 						/>
 					</div>
 					<div className="mb-8">
-						<label className="mb-3 block text-black dark:text-white">Upload Payment Receipt</label>
+						<label className="mb-3 block text-white dark:text-white">Upload Payment Receipt</label>
 						<input
 							type="file"
 							name="paymentReceipt"

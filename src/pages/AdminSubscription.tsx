@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { AdminLayout } from "../components/layouts/AdminLayout";
 import Modal from "../components/Modals/Modal";
 import { MdCancel } from "react-icons/md";
-import { subscriptions } from "../components/dashboards/data";
 import { SearchBar } from "../components/sharedUi/Searchbar";
 import { Pagination } from "../components/sharedUi/Pagination";
+import { useAdminContext } from "../context/AdminContext";
+import { SubscriptionState } from "../types/types";
 
 type Props = {};
 
@@ -13,20 +14,25 @@ const AdminSubscription = (props: Props) => {
   const [allowEndSubscription, setAllowEndSubscription] = useState(false);
   const [user, setUser] = useState("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredUsers, setFilteredUsers] = useState(subscriptions);
+  const [filteredUsers, setFilteredUsers] = useState<SubscriptionState[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  useEffect(() => {
-    const results = subscriptions?.filter(
-      (user) =>
-        user?.userId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.amount?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user?.status?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const { state, updateSubscription } = useAdminContext();
+  const subscriptions = state.subscriptions;
 
-    setFilteredUsers(results);
-  }, [searchTerm]);
+  useEffect(() => {
+    let result = subscriptions;
+
+    if (searchTerm) {
+      result = subscriptions?.filter(
+        (user) =>
+          user?.fullname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user?.amount?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredUsers(result);
+  }, [searchTerm, subscriptions]);
 
   const pageSize = 5;
 
@@ -41,11 +47,11 @@ const AdminSubscription = (props: Props) => {
     setCurrentPage(page);
   };
 
-  let subscriptionCount = 0;
+  let subscriptionCount = subscriptions.length;
 
-  const handleClickEndSubscription = (userId: string) => {
+  const handleClickEndSubscription = (id: string) => {
     setShowModal(true);
-    setUser(userId);
+    setUser(id);
   };
 
   const closeModal = () => {
@@ -59,13 +65,8 @@ const AdminSubscription = (props: Props) => {
       if (!user && !allowEndSubscription) {
         return;
       }
-      try {
-        alert("terminated");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setShowModal(false);
-      }
+      updateSubscription(user);
+      setShowModal(false);
     }, 1000);
   };
 
@@ -101,8 +102,8 @@ const AdminSubscription = (props: Props) => {
           </div>
         </div>
       </Modal>
-      <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-        <h2 className="font-bold text-xl mb-5 bg-primary p-4 text-white rounded-md ">
+      <div className="rounded-sm border  px-5 pt-6 pb-2.5 shadow-default border-strokedark bg-boxdark sm:px-7.5 xl:pb-1">
+        <h2 className="font-bold text-xl mb-5  p-4 text-white rounded-md ">
           ALL SUBSCRIPTIONS
         </h2>
         <SearchBar
@@ -113,26 +114,26 @@ const AdminSubscription = (props: Props) => {
         <div className="max-w-full overflow-x-auto no-scrollbar">
           <table className="w-full table-auto">
             <thead>
-              <tr className="text-left border-2">
-                <th className="min-w-[50px] py-4 px-4 font-medium text-black dark:text-black">
+              <tr className="text-left bg-meta-4">
+                <th className="min-w-[50px] py-4 px-4 font-medium text-white dark:text-white">
                   S/N
                 </th>
-                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
                   Fullname
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
                   Plan
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
                   Amount Invested
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
                   Duration
                 </th>
-                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-white dark:text-white">
                   Date
                 </th>
-                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-black">
+                <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
                   Action
                 </th>
               </tr>
@@ -142,41 +143,39 @@ const AdminSubscription = (props: Props) => {
               {subscriptions?.length &&
                 paginatedUsers?.map((subscription: any, key: number) => (
                   <tr key={key}>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="text-black  dark:text-white">
-                        {subscription?.userId}
-                      </h5>
+                    <td className="border py-5 px-4 border-strokedark">
+                      <h5 className="text-white  dark:text-white">{key + 1}</h5>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <h5 className="font-medium text-black dark:text-white">
+                    <td className="border py-5 px-4 border-strokedark">
+                      <h5 className="font-medium text-white dark:text-white">
                         {subscription.fullname}
                       </h5>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                    <td className="border py-5 px-4 border-strokedark">
+                      <p className="text-white dark:text-white">
                         {subscription?.plan}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] pl-12 py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                    <td className="border pl-12 py-5 px-4 border-strokedark">
+                      <p className="text-white dark:text-white">
                         ${subscription?.amount}
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                    <td className="border py-5 px-4 border-strokedark">
+                      <p className="text-white dark:text-white">
                         {subscription?.duration}days
                       </p>
                     </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
+                    <td className="border py-5 px-4 border-strokedark">
+                      <p className="text-white dark:text-white">
                         {subscription?.date}
                       </p>
                     </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 flex items-center gap-x-2 dark:border-strokedark">
+                    <td className="border py-5 px-4 flex items-center gap-x-2 border-strokedark">
                       <button
                         onClick={() =>
-                          handleClickEndSubscription(subscription.userId)
+                          handleClickEndSubscription(subscription.uid)
                         }
                         className="w-[170px] rounded-md  bg-danger text-white py-2 px-3 flex items-center justify-center  gap-x-2 whitespace-nowrap"
                       >

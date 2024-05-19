@@ -23,42 +23,42 @@ const Asset = (props: Props) => {
       <div className="mb-20 grid xl:grid-cols-4 gap-10">
         <SingleTicker
           symbol="BTCUSD"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="ETHBTC"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="ETHUSD"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="BTCUSDT"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="USDJPY"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="USDCAD"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="EURUSD"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
         <SingleTicker
           symbol="GBPUSD"
-          // colorTheme="dark"
+          colorTheme="dark"
           width="100%"
         ></SingleTicker>
       </div>

@@ -39,7 +39,7 @@ export default function SignIn() {
 				localStorage.setItem("token", data.user.refreshToken);
 				fetchUserData(data.user.uid);
 
-				if (data.user.email === "godwinopara62@yahoo.com") {
+				if (data.user.email === "adeyemooladunjoye@gmail.com") {
 					localStorage.setItem("admin", "true");
 				} else {
 					localStorage.removeItem("admin");
