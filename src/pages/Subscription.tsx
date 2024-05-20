@@ -28,7 +28,7 @@ const Subscription = (props: Props) => {
 
   return (
     <AdminLayout>
-      <div className="mb-10 rounded-md border border-stroke  text-white py-4 px-7 shadow-default dark:border-strokedark bg-boxdark">
+      <div className="mb-10 rounded-md border  text-white py-4 px-7 shadow-default border-strokedark bg-boxdark">
         <div className="my-1 flex items-end justify-between">
           <div>
             <h4 className="text-sm font-bold text-white dark:text-white mb-1">
@@ -72,7 +72,7 @@ const Subscription = (props: Props) => {
       )}
 
       {state.subscription.plan && (
-        <div className="border-stroke  bg-white dark:bg-boxdark flex flex-col items-center justify-center text-center h-full py-20">
+        <div className="border-strokedark  bg-boxdark flex flex-col items-center justify-center text-center h-full py-20">
           <div className="text-6xl text-primary mb-3">
             <FaCheckCircle />
           </div>

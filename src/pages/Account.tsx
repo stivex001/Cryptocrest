@@ -103,7 +103,7 @@ const Account = (props: Props) => {
       >
         <form onSubmit={handleSubmit}>
           <div className="mb-5 mt-10">
-            <label className="mb-2.5 block font-medium text-white">
+            <label className="mb-2.5 block font-medium text-black">
               Account Balance
             </label>
             <div className="relative">
@@ -119,7 +119,7 @@ const Account = (props: Props) => {
             </div>
           </div>
           <div className="mb-5">
-            <label className="mb-2.5 block font-medium text-white">
+            <label className="mb-2.5 block font-medium text-black">
               Profit
             </label>
             <div className="relative">
@@ -135,7 +135,7 @@ const Account = (props: Props) => {
             </div>
           </div>
           <div>
-            <label className="mb-2.5 block font-medium text-white">Bonus</label>
+            <label className="mb-2.5 block font-medium text-black">Bonus</label>
             <div className="relative">
               <input
                 type="text"

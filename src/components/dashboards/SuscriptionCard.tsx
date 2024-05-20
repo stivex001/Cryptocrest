@@ -14,7 +14,7 @@ export const SubscriptionCard = ({
   handleClick,
 }: SubscriptionCardProps) => {
   return (
-    <div className="rounded-md border border-stroke   text-white py-4 px-7 shadow-default dark:border-strokedark bg-boxdark">
+    <div className="rounded-md border   text-white py-4 px-7 shadow-default border-strokedark bg-boxdark">
       <div className="my-1 flex items-end justify-between">
         <div className="w-full">
           <h4 className="text-sm font-bold text-white dark:text-white mb-1">
