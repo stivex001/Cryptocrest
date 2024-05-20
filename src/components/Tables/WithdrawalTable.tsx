@@ -4,6 +4,7 @@ import { Withdrawal, WithdrawalState } from "../../types/types";
 // import { withdrawalData } from "../dashboards/data";
 
 export default function WithdrawalTable() {
+
   const [withdrawalData, setWithdrawalData] = useState<Withdrawal[]>([]);
 
   const { state } = useUserContext();
@@ -48,15 +49,19 @@ export default function WithdrawalTable() {
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+
                       <h5 className="font-medium text-white dark:text-white">
+
                         ${data.amount}
                       </h5>
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p
                         className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+
                           data.status === "completed"
                             ? "text-success bg-success"
+
                             : "text-warning bg-warning"
                         }`}
                       >
@@ -65,6 +70,7 @@ export default function WithdrawalTable() {
                     </td>
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <h5 className="font-medium text-white dark:text-white">
+
                         {data.date}
                       </h5>
                     </td>
@@ -76,6 +82,7 @@ export default function WithdrawalTable() {
         {withdrawalData.length < 1 && (
           <p className="text-center mt-5 py-4 text-xl">No Recent Withdrawal</p>
         )}
+
       </div>
     </>
   );

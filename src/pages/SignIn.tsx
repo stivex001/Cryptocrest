@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../images/LOGO-DARK.svg";
+import logo from "../images/crest-logo.svg";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../lib/firebase";
@@ -9,6 +9,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 export default function SignIn() {
+
 	const { fetchUserData, notify, notifyError } = useUserContext();
 
 	const [formData, setFormData] = useState({ email: "", password: "" });

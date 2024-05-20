@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useReducer, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { auth, db } from "../lib/firebase";
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
@@ -27,23 +34,25 @@ export interface UserState {
 	bitcoin: number;
 	joinedDate: string;
 	admin: boolean;
+
 }
 
 interface Asset {
-	id: string;
-	rank: string;
-	symbol: string;
-	name: string;
-	supply: string;
-	maxSupply: string;
-	marketCapUsd: string;
-	volumeUsd24Hr: string;
-	priceUsd: string;
-	changePercent24Hr: string;
-	vwap24Hr: string;
+  id: string;
+  rank: string;
+  symbol: string;
+  name: string;
+  supply: string;
+  maxSupply: string;
+  marketCapUsd: string;
+  volumeUsd24Hr: string;
+  priceUsd: string;
+  changePercent24Hr: string;
+  vwap24Hr: string;
 }
 
 interface User {
+
 	username: string;
 	email: string;
 	firstname: string;
@@ -58,52 +67,53 @@ interface User {
 }
 
 export interface AccountState {
-	balance: string;
-	profit: string;
-	bonus: string;
+  balance: string;
+  profit: string;
+  bonus: string;
 }
 
 interface DepositState {
-	amount: string;
-	date: string;
-	method: string;
-	status: string;
-	id: string | null;
-	screenshot: string | null;
+  amount: string;
+  date: string;
+  method: string;
+  status: string;
+  id: string | null;
+  screenshot: string | null;
 }
 
 interface WithdrawalState {
-	amount: string;
-	date: string;
-	method: string;
-	status: string;
+  amount: string;
+  date: string;
+  method: string;
+  status: string;
 }
 
 interface TradeState {
-	entry: string;
-	lotSize: string;
-	pairs: string;
-	profit: string;
-	status: string;
-	stopLoss: string;
-	takeProfit: string;
-	tradeOption: string;
-	tradeType: string;
-	result: string;
-	date: string;
+  entry: string;
+  lotSize: string;
+  pairs: string;
+  profit: string;
+  status: string;
+  stopLoss: string;
+  takeProfit: string;
+  tradeOption: string;
+  tradeType: string;
+  result: string;
+  date: string;
 }
 interface SubscriptionState {
-	plan: string;
-	amount: string;
-	duration: string;
-	date: string;
+  plan: string;
+  amount: string;
+  duration: string;
+  date: string;
 }
 interface VerificationState {
-	document: string | null;
-	status: string;
+  document: string | null;
+  status: string;
 }
 
 interface UserContextType {
+
 	state: UserState;
 	fetchUserData: (uid: string) => void;
 	addDeposit: (payload: DepositState) => void;
@@ -141,32 +151,34 @@ const initialState: UserState = {
 	assets: [],
 	joinedDate: "",
 	admin: false,
+
 };
 
 // Step 3: Define Action Types
 type Action =
-	| { type: "GET_USER"; payload: User }
-	| { type: "GET_ACCOUNT"; payload: AccountState }
-	| { type: "GET_DEPOSITS"; payload: DepositState[] }
-	| { type: "ADD_DEPOSIT"; payload: DepositState }
-	| { type: "GET_WITHDRAWALS"; payload: WithdrawalState[] }
-	| { type: "GET_ASSETS"; payload: Asset[] }
-	| { type: "ADD_WITHDRAWAL"; payload: WithdrawalState }
-	| { type: "UPDATE_PROFILE_PIC"; payload: string }
-	| { type: "UPDATE_PASSWORD"; payload: string }
-	| { type: "TRADES"; payload: TradeState[] }
-	| { type: "ADD_TRADE"; payload: TradeState }
-	| { type: "VERIFICATION_STATUS"; payload: VerificationState }
-	| { type: "SUBSCRIPTION"; payload: SubscriptionState }
-	| { type: "UPDATE_SUBSCRIPTION"; payload: SubscriptionState }
-	| {
-			type: "SET_CRYPTOCURRENCY_RATES";
-			payload: number;
-	  }
-	| { type: "SET_LOADING"; payload: boolean }
-	| { type: "SET_ERROR"; payload: string };
+  | { type: "GET_USER"; payload: User }
+  | { type: "GET_ACCOUNT"; payload: AccountState }
+  | { type: "GET_DEPOSITS"; payload: DepositState[] }
+  | { type: "ADD_DEPOSIT"; payload: DepositState }
+  | { type: "GET_WITHDRAWALS"; payload: WithdrawalState[] }
+  | { type: "GET_ASSETS"; payload: Asset[] }
+  | { type: "ADD_WITHDRAWAL"; payload: WithdrawalState }
+  | { type: "UPDATE_PROFILE_PIC"; payload: string }
+  | { type: "UPDATE_PASSWORD"; payload: string }
+  | { type: "TRADES"; payload: TradeState[] }
+  | { type: "ADD_TRADE"; payload: TradeState }
+  | { type: "VERIFICATION_STATUS"; payload: VerificationState }
+  | { type: "SUBSCRIPTION"; payload: SubscriptionState }
+  | { type: "UPDATE_SUBSCRIPTION"; payload: SubscriptionState }
+  | {
+      type: "SET_CRYPTOCURRENCY_RATES";
+      payload: number;
+    }
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_ERROR"; payload: string };
 
 const UserContext = createContext<UserContextType>({
+
 	state: initialState,
 	fetchUserData: () => null,
 	addDeposit: () => null,
@@ -183,41 +195,42 @@ const UserContext = createContext<UserContextType>({
 });
 
 const userReducer = (state: UserState, action: Action): UserState => {
-	switch (action.type) {
-		case "GET_USER":
-			return { ...state, ...action.payload };
-		case "GET_ACCOUNT":
-			return { ...state, account: action.payload };
-		case "GET_WITHDRAWALS":
-			return { ...state, withdrawals: action.payload };
-		case "GET_DEPOSITS":
-			return { ...state, deposits: action.payload };
-		case "GET_ASSETS":
-			return { ...state, assets: action.payload };
-		case "TRADES":
-			return { ...state, trades: action.payload };
-		case "ADD_DEPOSIT":
-			return { ...state, deposits: [...state.deposits, action.payload] };
-		case "ADD_WITHDRAWAL":
-			return { ...state, withdrawals: [...state.withdrawals, action.payload] };
-		case "ADD_TRADE":
-			return { ...state, trades: [...state.trades, action.payload] };
-		case "VERIFICATION_STATUS":
-			return { ...state, verification: action.payload };
-		case "SUBSCRIPTION":
-			return { ...state, subscription: action.payload };
-		case "UPDATE_PROFILE_PIC":
-			return { ...state, photoUrl: action.payload };
-		case "UPDATE_PASSWORD":
-			return { ...state, password: action.payload };
-		case "SET_CRYPTOCURRENCY_RATES":
-			return { ...state, bitcoin: action.payload };
-		default:
-			return state;
-	}
+  switch (action.type) {
+    case "GET_USER":
+      return { ...state, ...action.payload };
+    case "GET_ACCOUNT":
+      return { ...state, account: action.payload };
+    case "GET_WITHDRAWALS":
+      return { ...state, withdrawals: action.payload };
+    case "GET_DEPOSITS":
+      return { ...state, deposits: action.payload };
+    case "GET_ASSETS":
+      return { ...state, assets: action.payload };
+    case "TRADES":
+      return { ...state, trades: action.payload };
+    case "ADD_DEPOSIT":
+      return { ...state, deposits: [...state.deposits, action.payload] };
+    case "ADD_WITHDRAWAL":
+      return { ...state, withdrawals: [...state.withdrawals, action.payload] };
+    case "ADD_TRADE":
+      return { ...state, trades: [...state.trades, action.payload] };
+    case "VERIFICATION_STATUS":
+      return { ...state, verification: action.payload };
+    case "SUBSCRIPTION":
+      return { ...state, subscription: action.payload };
+    case "UPDATE_PROFILE_PIC":
+      return { ...state, photoUrl: action.payload };
+    case "UPDATE_PASSWORD":
+      return { ...state, password: action.payload };
+    case "SET_CRYPTOCURRENCY_RATES":
+      return { ...state, bitcoin: action.payload };
+    default:
+      return state;
+  }
 };
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+
 	const [state, dispatch] = useReducer(userReducer, initialState);
 	const [loading, setLoading] = useState<boolean>(false);
 	// const [error, setError] = useState<string | null>(null);
@@ -473,8 +486,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 			{children}
 		</UserContext.Provider>
 	);
+
 };
 
 export function useUserContext() {
-	return useContext(UserContext);
+  return useContext(UserContext);
 }

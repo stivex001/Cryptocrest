@@ -15,7 +15,9 @@ export default function AssetsTable() {
   };
 
   return (
+
     <div className="rounded-sm border  bg-boxdark px-5 pt-6 pb-2.5 shadow-default border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+   
       <h2 className="font-bold text-xl mb-5">Assets</h2>
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
@@ -32,6 +34,7 @@ export default function AssetsTable() {
               </th>
 
               <th className="min-w-[150px] py-4 px-4 font-medium text-white dark:text-white">
+            
                 Action
               </th>
             </tr>
@@ -39,6 +42,7 @@ export default function AssetsTable() {
           <tbody>
             {state.assets.map((assetItem, key) => (
               <tr key={key}>
+
                 <td className="border flex items-center gap-x-2 py-5 px-4 border-strokedark">
                   <img
                     src={`https://assets.coincap.io/assets/icons/${assetItem.symbol.toLowerCase()}@2x.png`}
@@ -56,6 +60,7 @@ export default function AssetsTable() {
                 </td>
                 <td className="border py-5 px-4 border-strokedark">
                   <h5 className="font-medium text-white dark:text-white">
+
                     ${assetItem.priceUsd ? formatPrice(assetItem.priceUsd) : ""}
                   </h5>
                 </td>
