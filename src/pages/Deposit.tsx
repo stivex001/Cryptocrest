@@ -136,7 +136,7 @@ const Deposit = (props: Props) => {
           here and fill the deposit notification form.
         </p>
         <form onSubmit={handleSubmit}>
-          <div className="relative z-20 bg-transparent mb-4">
+          <div className="relative z-20 bg-boxdark mb-4">
             <label className="mb-2.5 block text-white dark:text-white">
               Select Payment Method
             </label>
@@ -145,7 +145,7 @@ const Deposit = (props: Props) => {
               value={formData.paymentMethod}
               required
               onChange={handleInputChange}
-              className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-meta-3 active:border-meta-3 dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
+              className="relative z-20 w-full appearance-none rounded border border-strokedark bg-boxdark text-white py-3 px-5 outline-none transition focus:border-meta-3 active:border-meta-3 dark:border-form-strokedark dark:bg-form-input dark:focus:border-meta-3"
             >
               <option value="">Select Payment</option>
               <option value="Bitcoin">Bitcoin Payment</option>

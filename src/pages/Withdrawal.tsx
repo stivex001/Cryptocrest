@@ -109,7 +109,7 @@ const Withdrawal = (props: Props) => {
                   name="paymentMethod"
                   onChange={handleInputChange}
                   required
-                  className="z-20 w-full appearance-none rounded border border-strokedark bg-transparent py-3 px-5 outline-none transition focus:border-meta-3 active:border-meta-3 dark:border-form-strokedark dark:bg-form-input"
+                  className="z-20 w-full appearance-none rounded border border-strokedark bg-boxdark py-3 px-5 outline-none transition focus:border-meta-3 active:border-meta-3 dark:border-form-strokedark dark:bg-form-input"
                 >
                   <option value="">Select Payment Method</option>
                   <option value="Bitcoin">Bitcoin</option>
