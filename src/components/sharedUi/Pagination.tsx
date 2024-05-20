@@ -17,7 +17,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className=" flex flex-col gap-5 lg:gap-0 lg:flex-row justify-between items-center my-6">
+    <div className="text-white flex flex-col gap-5 lg:gap-0 lg:flex-row justify-between items-center my-6">
       <div>
         Showing {startEntry} to {endEntry} of {totalPages * 5} entries
       </div>
