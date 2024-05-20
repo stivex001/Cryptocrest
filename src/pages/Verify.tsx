@@ -83,7 +83,7 @@ const Verify = (props: Props) => {
             />
           </div>
         )}
-        <div className="mb-20 text-center rounded-md border border-strokedark  bg-boxdark py-8 px-8 shadow-default">
+        <div className="mb-20 text-white text-center rounded-md border border-strokedark  bg-boxdark py-8 px-8 shadow-default">
           <h2 className="font-bold mb-3 text-xl">Account Status</h2>
           {verificationStatus === "not-verified" && (
             <p>
@@ -93,7 +93,7 @@ const Verify = (props: Props) => {
           )}
 
           {verificationStatus === "pending" && (
-            <div className="flex min-h-[50vh] flex-col text-center justify-center items-center text-2xl mt-8 pb-8">
+            <div className="flex min-h-[50vh] flex-col text-center justify-center items-center text-2xl bg-boxdark py-8 px-8 text-white ">
               <div className="text-9xl mb-5 text-primary">
                 <AiOutlineFileSearch />
               </div>
@@ -106,7 +106,7 @@ const Verify = (props: Props) => {
             </div>
           )}
           {verificationStatus === "verified" && (
-            <div className="flex flex-col min-h-[50vh] text-center justify-center items-center text-xl mt-8 pb-8">
+            <div className="flex flex-col min-h-[50vh] text-center justify-center items-center text-xl mt-8 pb-8 border-strokedark  bg-boxdark py-8 px-8 text-white">
               <div className="text-8xl mb-5 text-primary">
                 <MdVerified />
               </div>
@@ -125,7 +125,7 @@ const Verify = (props: Props) => {
         </div>
 
         {!uploaded && (
-          <div className="mb-10 flex justify-center items-center gap-3">
+          <div className="mb-10 flex  justify-center items-center gap-3 text-white border-strokedark  bg-boxdark py-8 px-8 ">
             <div>
               <p className="mb-1.5 text-white text-center">
                 SUBMIT VERIFICATION
@@ -142,7 +142,7 @@ const Verify = (props: Props) => {
           <form onSubmit={handleImageUpload}>
             <div
               id="FileUpload"
-              className="relative mb-5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-body bg-gray py-4 px-4 dark:bg-primary sm:py-7.5"
+              className="relative mb-5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-body bg-boxdark text-white py-4 px-4 dark:bg-primary sm:py-7.5"
               {...getRootProps()}
             >
               <input

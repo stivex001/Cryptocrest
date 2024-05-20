@@ -73,7 +73,7 @@ const Withdrawal = (props: Props) => {
           totalEth={`0.03185058 `}
         />
       </div>
-      <div className="mb-20 rounded-sm w-full p-6  bg-boxdark shadow-default  dark:bg-transparent">
+      <div className="mb-20 rounded-sm w-full p-6 text-white bg-boxdark shadow-default  dark:bg-transparent">
         <div className="border-b  py-4 border-strokedark">
           <h3 className="font-medium text-white">
             Withdrawal Transaction
