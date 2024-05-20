@@ -1,13 +1,12 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoutes from "./ProtectedRoutes";
-import { UserProvider, UserState, useUserContext } from "./context/UserContext";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "./lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { UserProvider, useUserContext } from "./context/UserContext";
 import Loader from "./components/ui/Loader";
 import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
+import AdminProtectedRoutes from "./AdminProtectedRoutes";
+import AdminProvider from "./context/AdminContext";
 
 const Home = lazy(() => import("./pages/Home"));
 const About = lazy(() => import("./pages/About"));
@@ -45,6 +44,7 @@ const AdminTradingSession = lazy(() => import("./pages/AdminTradingSession"));
 const AdminSubscription = lazy(() => import("./pages/AdminSubscription"));
 const AdminVerifications = lazy(() => import("./pages/AdminVerifications"));
 const AdminNotification = lazy(() => import("./pages/AdminNotification"));
+const AdminSignIn = lazy(() => import("./pages/AdminSignIn"));
 
 const router = createBrowserRouter([
   {
@@ -128,7 +128,11 @@ const router = createBrowserRouter([
     element: <SignIn />,
   },
   {
-    element: <ProtectedRoutes />,
+    path: "admin/signin",
+    element: <AdminSignIn />,
+  },
+  {
+    element: <AdminProtectedRoutes />,
     children: [
       {
         path: "admin/dashboard",
@@ -170,6 +174,11 @@ const router = createBrowserRouter([
         path: "admin/notifications",
         element: <AdminNotification />,
       },
+    ],
+  },
+  {
+    element: <ProtectedRoutes />,
+    children: [
       {
         path: "user/dashboard",
         element: <UserDashboard />,
@@ -208,14 +217,48 @@ const router = createBrowserRouter([
 
 function App() {
   useEffect(() => {
+    // Retrieve expiration time from local storage
+    const expirationTime = parseInt(
+      localStorage.getItem("expirationTime") || "0",
+      10
+    );
+    // Get the current time
+    const currentTime = new Date().getTime();
+
+    // Check if the expiration time is valid and if it's expired
+    if (expirationTime && currentTime >= expirationTime) {
+      // Clear tokens from local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("adminToken");
+      // Redirect to the sign-in page
+      window.location.href = "/signin";
+    }
+  }, []);
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    // Set a timer to clear tokens from local storage after 2 hours
+    const tokenExpirationTimer = setTimeout(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("adminToken");
+      // window.location.href = "/signin";
+    }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+
+    // Clear the timer when the component unmounts or when the expiration time changes
+    return () => clearTimeout(tokenExpirationTimer);
   }, []);
 
   return (
     <Suspense fallback={<Loader />}>
       <UserProvider>
-        <Toaster position="top-right" reverseOrder={false} />
-        <RouterProvider router={router} />
+        <AdminProvider>
+          <Toaster position="top-right" reverseOrder={false} />
+          <RouterProvider router={router} />
+        </AdminProvider>
       </UserProvider>
     </Suspense>
   );
