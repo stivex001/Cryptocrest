@@ -58,7 +58,7 @@ const AdminTradingSession = (props: Props) => {
     }
 
     setFilteredUsers(results);
-  }, [searchTerm, state.trades]);
+  }, [searchTerm, state.trades, trades]);
 
   const pageSize = 5;
 
@@ -293,7 +293,7 @@ const AdminTradingSession = (props: Props) => {
 
                     <td className="border py-5 px-4 flex items-center gap-x-2 border-strokedark">
                       <button
-                        onClick={() => handleShowModal(trade.id, trade.uid)}
+                        onClick={() => handleShowModal(trade?.id, trade?.uid)}
                         className="w-[110px] rounded-md  bg-meta-3 text-white py-2 px-3 flex items-center justify-center  gap-x-2"
                       >
                         Update

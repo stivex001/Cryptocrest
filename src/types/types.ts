@@ -67,8 +67,8 @@ export interface WithdrawalState {
 	method: string;
 	status: string;
 	fullname?: string;
-	id?: string;
-	uid?: string;
+	id: string;
+	uid: string;
 }
 
 export interface Withdrawal {
@@ -93,8 +93,8 @@ export interface TradeState {
 	result: string;
 	date: string;
 	fullname?: string;
-	id?: string;
-	uid?: string;
+	id: string;
+	uid: string;
 }
 
 export interface TradePayload {
