@@ -215,7 +215,7 @@ export default function SignUp() {
 			<div className="hidden xl:block xl:w-[85%] min-h-screen bg-authImg bg-center bg-cover"></div>
 			<div className="xl:w-[75%] my-10">
 				<Link to="/" className="flex justify-center items-center mb-16 cursor-pointer">
-					<img src={logo} alt="" className="w-[50%]" />
+					<img src={logo} alt="" className="w-[20%]" />
 				</Link>
 				<form onSubmit={handleSubmitSignUp}>
 					<div className="mb-4 xl:flex gap-x-3">
